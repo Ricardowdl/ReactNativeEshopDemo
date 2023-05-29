@@ -11,6 +11,11 @@ import {theme} from '../core/theme';
 import {emailValidator} from '../helpers/emailValidator';
 import {passwordValidator} from '../helpers/passwordValidator';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  hasHardwareAsync,
+  isEnrolledAsync,
+  authenticateAsync,
+} from 'expo-local-authentication';
 
 export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState({value: '', error: ''});
@@ -30,6 +35,35 @@ export default function LoginScreen({navigation}) {
       index: 0,
       routes: [{name: 'Dashboard'}],
     });
+  };
+
+  const onClickFace = async () => {
+    // https://docs.expo.dev/versions/latest/sdk/local-authentication/?redirected#configuration-in-appjsonappconfigjs
+    console.log('click');
+    const compatible = await hasHardwareAsync();
+    console.log('compatible', compatible);
+    if (!compatible) {
+      throw 'This device is not compatible for biometric authentication';
+    }
+
+    const enrolled = await isEnrolledAsync();
+    console.log('enrolled', enrolled);
+
+    if (!enrolled) {
+      throw "This device doesn't have biometric authentication enabled";
+    }
+    const result = await authenticateAsync();
+    alert('login suceess');
+
+    if (result.success) {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Dashboard'}],
+      });
+    } else {
+      throw `${result.error} - Authentication unsuccessful`;
+    }
+    return;
   };
 
   return (
@@ -59,6 +93,7 @@ export default function LoginScreen({navigation}) {
       />
       <View style={styles.middleText}>
         <View style={styles.RememberMe}>
+          {/* loss checkbox */}
           <Text style={styles.forgot}> Remember me</Text>
         </View>
 
@@ -72,7 +107,9 @@ export default function LoginScreen({navigation}) {
       <Button mode="contained" onPress={onLoginPressed}>
         Login
       </Button>
-      <Icon style={styles.row} name="face-recognition" size={70} color="#900" />
+      <TouchableOpacity style={styles.row} onPress={() => onClickFace()}>
+        <Icon name="face-recognition" size={70} color="#900" />
+      </TouchableOpacity>
       <View style={styles.row}>
         <Text style={styles.white}>if you don’t have account</Text>
 
@@ -110,7 +147,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   white: {
-    color: 'white',
+    color: 'blue',
   },
   forgot: {
     fontSize: 13,
