@@ -10,6 +10,7 @@ import BackButton from '../components/BackButton';
 import {theme} from '../core/theme';
 import {emailValidator} from '../helpers/emailValidator';
 import {passwordValidator} from '../helpers/passwordValidator';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState({value: '', error: ''});
@@ -56,17 +57,22 @@ export default function LoginScreen({navigation}) {
         errorText={password.error}
         secureTextEntry
       />
+      <View style={styles.middleText}>
+        <View style={styles.RememberMe}>
+          <Text style={styles.forgot}> Remember me</Text>
+        </View>
 
-      <Text style={styles.forgot}> Remember me</Text>
-      <View style={styles.forgotPassword}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('ResetPasswordScreen')}>
-          <Text style={styles.forgot}>Forgot Password</Text>
-        </TouchableOpacity>
+        <View style={styles.forgotPassword}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ResetPasswordScreen')}>
+            <Text style={styles.forgot}>Forgot Password</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <Button mode="contained" onPress={onLoginPressed}>
         Login
       </Button>
+      <Icon style={styles.row} name="face-recognition" size={70} color="#900" />
       <View style={styles.row}>
         <Text style={styles.white}>if you don’t have account</Text>
 
@@ -82,14 +88,26 @@ export default function LoginScreen({navigation}) {
 
 const styles = StyleSheet.create({
   forgotPassword: {
-    width: '100%',
+    flex: 1,
     alignItems: 'flex-end',
+    marginBottom: 24,
+  },
+  middleText: {
+    with: '100%',
+    flexDirection: 'row',
+  },
+  RememberMe: {
+    flex: 1,
+    alignItems: 'flex-start',
     marginBottom: 24,
   },
   row: {
     flexDirection: 'column',
     alignItems: 'center',
-    marginTop: 100,
+    marginTop: 50,
+  },
+  icon: {
+    marginTop: 50,
   },
   white: {
     color: 'white',
