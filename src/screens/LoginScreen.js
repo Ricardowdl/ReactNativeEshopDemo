@@ -21,16 +21,15 @@ export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState({value: '', error: ''});
   const [password, setPassword] = useState({value: '', error: ''});
 
-  const [checked, setChecked] = useState(false);
-
   const onLoginPressed = () => {
-    const emailError = emailValidator(email.value);
-    const passwordError = passwordValidator(password.value);
-    if (emailError || passwordError) {
-      setEmail({...email, error: emailError});
-      setPassword({...password, error: passwordError});
-      return;
-    }
+    // const emailError = emailValidator(email.value);
+    // const passwordError = passwordValidator(password.value);
+    // if (emailError || passwordError) {
+    //   setEmail({...email, error: emailError});
+    //   setPassword({...password, error: passwordError});
+    //   return;
+    // }
+    console.log('进入dashboard');
     navigation.reset({
       index: 0,
       routes: [{name: 'Dashboard'}],

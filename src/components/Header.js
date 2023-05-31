@@ -1,10 +1,14 @@
-import React from 'react'
-import { StyleSheet } from 'react-native'
-import { Text } from 'react-native-paper'
-import { theme } from '../core/theme'
+import React from 'react';
+import {StyleSheet} from 'react-native';
+import {View, Text} from 'react-native-paper';
+import {theme} from '../core/theme';
 
-export default function Header(props) {
-  return <Text style={styles.header} {...props} />
+// export function Header(props) {
+//   return <Text style={styles.header} {...props} />;
+// }
+
+export function EShopHeader(props) {
+  return <View style={styles.eHeader} />;
 }
 
 const styles = StyleSheet.create({
@@ -14,4 +18,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingVertical: 12,
   },
-})
+  eHeader: {
+    width: '100%',
+    backgroundColor: 'orange',
+    flex: 0.1,
+  },
+});
