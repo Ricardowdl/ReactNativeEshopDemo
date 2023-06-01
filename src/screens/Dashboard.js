@@ -1,20 +1,9 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-import Paragraph from '../components/Paragraph';
-import Button from '../components/Button';
-import TopComponent from '../components/TopComponent';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
-import {Home} from './index';
-
-function Category() {
-  return (
-    <View style={styles.center}>
-      <Text>Category!</Text>
-    </View>
-  );
-}
+import {Home, Category} from './index';
 
 function Orders() {
   return (

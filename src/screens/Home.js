@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import TopComponent from '../components/TopComponent';
-import {Button as PaperButton, Searchbar} from 'react-native-paper';
+import {Searchbar} from 'react-native-paper';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import {cloneDeep} from 'lodash';
 
