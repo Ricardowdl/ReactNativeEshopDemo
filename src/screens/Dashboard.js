@@ -29,7 +29,7 @@ export default function Dashboard({navigation}) {
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={{
-        tabBarActiveTintColor: '#e91e63',
+        tabBarActiveTintColor: 'rgb(52,32,228)',
         headerShown: false,
       }}>
       <Tab.Screen

@@ -6,10 +6,14 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
+  Button,
 } from 'react-native';
 import TopComponent from '../components/TopComponent';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
+import {CategorySecond, CategoryThird} from './index';
 
+// DATA 类的数据以后需要改为从api中load，存于redux中
 const categoryMobileData = [
   {
     category: 'APPLE PHONE',
@@ -25,7 +29,7 @@ const categoryMobileData = [
   },
   {
     category: 'HUAWEI PHONE',
-    url: require('../assets/xiaomi.png'),
+    url: require('../assets/mate50.webp'),
   },
 ];
 
@@ -89,8 +93,10 @@ const DATA = [
   },
 ];
 
+const CategoryStack = createNativeStackNavigator();
+
 const RenderCategoryItem = ({item, index}) => {
-  const {url, category} = item;
+  const {url, category, navigation} = item;
   const ViewStyle = {
     width: 325,
     height: 150,
@@ -116,59 +122,95 @@ const RenderCategoryItem = ({item, index}) => {
   };
 
   return (
-    <View style={ViewStyle}>
-      <TouchableOpacity
-        onPress={() => {
-          //   setIsHeart(!isHeart);
-        }}>
-        <AntDesignIcon
-          style={AntDesignIconStyle}
-          name={'hearto'}
-          color={'white'}
-          size={20}
-        />
-      </TouchableOpacity>
-      <Image source={url} style={imageStyle} />
-      <Text style={TextStyle}>{category}</Text>
-    </View>
+    <TouchableOpacity
+      onPress={() => {
+        console.log('click', category);
+        navigation.navigate('CategoryThird', {category: category});
+      }}>
+      <View style={ViewStyle}>
+        <TouchableOpacity
+          onPress={() => {
+            //   setIsHeart(!isHeart);
+          }}>
+          <AntDesignIcon
+            style={AntDesignIconStyle}
+            name={'hearto'}
+            color={'white'}
+            size={20}
+          />
+        </TouchableOpacity>
+        <Image source={url} style={imageStyle} />
+        <Text style={TextStyle}>{category}</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
-const renderItem = ({item}) => {
-  const {title, categoryData} = item;
-  const marginRight250 = {marginLeft: 120};
+const CategoryHome = ({navigation}) => {
+  const renderItem = ({item}) => {
+    const {title, categoryData} = item;
+    categoryData.map(i => {
+      i.navigation = navigation;
+    });
+    const marginRight250 = {marginLeft: 120};
 
-  const ViewStyle = {
-    heigh: 20,
-    width: '100%',
-    flexDirection: 'row',
+    const ViewStyle = {
+      heigh: 20,
+      width: '100%',
+      flexDirection: 'row',
+    };
+
+    const TextStyle = {
+      fontWeight: 'bold',
+      color: '#000',
+      fontSize: 25,
+      width: 200,
+    };
+    return (
+      <View
+        style={{
+          height: 200,
+          margin: 20,
+        }}>
+        <View style={ViewStyle}>
+          <Text style={TextStyle}>{title}</Text>
+          <TouchableOpacity
+            style={marginRight250}
+            onPress={() => {
+              navigation.navigate('CategorySecond', {
+                type: title,
+              });
+            }}>
+            <AntDesignIcon name="ellipsis1" size={20} />
+          </TouchableOpacity>
+        </View>
+
+        <FlatList
+          data={categoryData}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          renderItem={RenderCategoryItem}
+          keyExtractor={_item => _item.category}
+        />
+      </View>
+    );
   };
 
   return (
-    <View
-      style={{
-        height: 200,
-        margin: 20,
-      }}>
-      <View style={ViewStyle}>
-        <Text
-          style={{fontWeight: 'bold', color: '#000', fontSize: 25, width: 200}}>
-          {title}
-        </Text>
-        <TouchableOpacity style={marginRight250}>
-          <AntDesignIcon name="ellipsis1" size={20} />
-        </TouchableOpacity>
-      </View>
-
-      <FlatList
-        // extraData={isHeartArr}
-        data={categoryData}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        renderItem={RenderCategoryItem}
-        keyExtractor={_item => _item.category}
+    <>
+      <Text style={{...styles.text, ...styles.textMargin}}>CATEGORY</Text>
+      <Image
+        style={styles.image}
+        source={require('../assets/category_top.png')}
       />
-    </View>
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        style={styles.marginTop20}
+        data={DATA}
+        renderItem={renderItem}
+        keyExtractor={item => item.title}
+      />
+    </>
   );
 };
 
@@ -177,19 +219,20 @@ export default function Category({navigation}) {
     <>
       <TopComponent navigation={navigation} />
 
-      <Text style={{...styles.text, ...styles.textMargin}}>CATEGORY</Text>
-      <Image
-        style={styles.image}
-        source={require('../assets/category_top.png')}
-      />
+      {/* 核心逻辑应该是一个页面，通过传递参数的形式复用组件，比如只有一个二级分类页，里面是展示手机、TV是通过param参数来决定 */}
 
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        style={styles.marginTop20}
-        data={DATA}
-        renderItem={renderItem}
-        keyExtractor={item => item.title}
-      />
+      <CategoryStack.Navigator
+        initialRouteName="CategoryHome"
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <CategoryStack.Screen name="CategoryHome" component={CategoryHome} />
+        <CategoryStack.Screen
+          name="CategorySecond"
+          component={CategorySecond}
+        />
+        <CategoryStack.Screen name="CategoryThird" component={CategoryThird} />
+      </CategoryStack.Navigator>
     </>
   );
 }
